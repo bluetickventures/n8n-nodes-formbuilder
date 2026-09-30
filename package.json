@@ -1,0 +1,62 @@
+{
+  "name": "n8n-nodes-formbuilder",
+  "version": "0.1.0",
+  "description": "FormBuilder forms, response triggers and authenticated artwork file downloads for n8n",
+  "license": "MIT",
+  "homepage": "https://formbuilder.com",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "author": {
+    "name": "FormBuilder",
+    "url": "https://formbuilder.com",
+    "email": "support@formbuilder.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluetickventures/n8n-nodes-formbuilder.git"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "examples"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/FormBuilderApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/FormBuilder/FormBuilder.node.js",
+      "dist/nodes/FormBuilder/FormBuilderTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "0.47.2",
+    "@n8n/scan-community-package": "0.35.0",
+    "@types/node": "24.10.1",
+    "eslint": "9.39.4",
+    "n8n-workflow": "2.16.0",
+    "prettier": "3.8.3",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "bugs": {
+    "url": "https://github.com/bluetickventures/n8n-nodes-formbuilder/issues"
+  }
+}

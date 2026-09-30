@@ -1,0 +1,116 @@
+{
+  "name": "Artwork quote intake \u2014 download private originals",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "id": "instructions",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [220, -180],
+      "parameters": {
+        "content": "## Configure before activation\nInstall the local FormBuilder package and select your API credential in all FormBuilder nodes. Choose your real quote form in the trigger. This inactive recipe fetches private originals into n8n binary data. Add your own authorized storage or production destination after review. Retry failed executions carefully: the duplicate filter records IDs before downstream operations.",
+        "height": 220,
+        "width": 700
+      }
+    },
+    {
+      "id": "trigger",
+      "name": "New artwork quote",
+      "type": "n8n-nodes-formbuilder.formBuilderTrigger",
+      "typeVersion": 1,
+      "position": [260, 160],
+      "parameters": {
+        "event": "response.created",
+        "formId": "REPLACE_WITH_FORM_ID",
+        "selectedFields": [],
+        "includeTest": false
+      }
+    },
+    {
+      "id": "dedupe",
+      "name": "Deduplicate responses",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [500, 160],
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "logic": "removeItemsWithAlreadySeenKeyValues",
+        "dedupeValue": "={{ $json.form_id + \":\" + $json.response_id }}",
+        "options": {
+          "scope": "node",
+          "historySize": 10000
+        }
+      }
+    },
+    {
+      "id": "files",
+      "name": "List artwork files",
+      "type": "n8n-nodes-formbuilder.formBuilder",
+      "typeVersion": 1,
+      "position": [740, 160],
+      "parameters": {
+        "resource": "file",
+        "operation": "getMany",
+        "formId": "={{ $json.form_id }}",
+        "responseId": "={{ $json.response_id }}",
+        "returnAll": true
+      }
+    },
+    {
+      "id": "download",
+      "name": "Download private original",
+      "type": "n8n-nodes-formbuilder.formBuilder",
+      "typeVersion": 1,
+      "position": [980, 160],
+      "parameters": {
+        "resource": "file",
+        "operation": "download",
+        "formId": "={{ $json.form_id }}",
+        "responseId": "={{ $json.response_id }}",
+        "fileId": "={{ $json.id }}",
+        "binaryPropertyName": "artwork"
+      }
+    }
+  ],
+  "connections": {
+    "New artwork quote": {
+      "main": [
+        [
+          {
+            "node": "Deduplicate responses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deduplicate responses": {
+      "main": [
+        [
+          {
+            "node": "List artwork files",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "List artwork files": {
+      "main": [
+        [
+          {
+            "node": "Download private original",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}

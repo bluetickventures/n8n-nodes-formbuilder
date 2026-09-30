@@ -1,0 +1,68 @@
+{
+  "name": "Create an artwork quote draft",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "id": "manual",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [260, 160],
+      "parameters": {}
+    },
+    {
+      "id": "create",
+      "name": "Create quote form draft",
+      "type": "n8n-nodes-formbuilder.formBuilder",
+      "typeVersion": 1,
+      "position": [520, 160],
+      "parameters": {
+        "resource": "form",
+        "operation": "create",
+        "title": "Artwork quote request",
+        "description": "Tell us what you would like printed and attach the original artwork.",
+        "fields": {
+          "field": [
+            {
+              "label": "Customer email",
+              "type": "email",
+              "required": true
+            },
+            {
+              "label": "Project details",
+              "type": "textarea",
+              "required": true
+            },
+            {
+              "label": "Quantity",
+              "type": "number",
+              "required": true
+            },
+            {
+              "label": "Original artwork",
+              "type": "file",
+              "required": true
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Create quote form draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}
